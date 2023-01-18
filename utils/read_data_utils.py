@@ -4,7 +4,10 @@ import s3fs
 import streamlit as st
 
 # Cache the data so it isn't reloaded each time you select a different options
-@st.cache(allow_output_mutation=True) 
+#@st.cache(persist=True, allow_output_mutation=True) 
+
+# Uses st.experimental_memo to only rerun when the query changes or after 10 min.
+@st.experimental_memo(ttl=600, persist="disk")
 def load_data_from_aws(persist=True): 
     """
     Load ICESat-2 zarrs from s3 bucket into an xarray Dataset object 
@@ -51,3 +54,4 @@ def load_data_from_aws(persist=True):
         is2_ds = is2_ds.persist()
         sys.stdout.write("complete!")
     return is2_ds
+

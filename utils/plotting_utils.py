@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 def compute_vmin_vmax(da): 
     """
@@ -51,3 +52,36 @@ def get_plot_settings_by_var(variable, xr_da):
         # Otherwise make the label say "variable longname (units)"
         clabel = xr_da.long_name + " (" + xr_da.units + ")"
     return clim, cmap, clabel
+
+def get_winter_data(da, year_start=None, start_month="Sep", end_month="Apr", force_complete_season=False):
+    """ Select data for winter seasons corresponding to the input time range 
+    
+    Args: 
+        da (xr.Dataset or xr.DataArray): data to restrict by time; must contain "time" as a coordinate 
+        year_start (str, optional): year to start time range; if you want Sep 2019 - Apr 2020, set year="2019" (default to the first year in the dataset)
+        start_month (str, optional): first month in winter (default to September)
+        end_month (str, optional): second month in winter; this is the following calender year after start_month (default to April)
+        force_complete_season (bool, optional): require that winter season returns data if and only if all months have data? i.e. if Sep and Oct have no data, return nothing even if Nov-Apr have data? (default to False) 
+        
+    Returns: 
+        da_winter (xr.Dataset or xr.DataArray): da restricted to winter seasons 
+    
+    """
+    if year_start is None: 
+        print("No start year specified. Getting winter data for first year in the dataset")
+        year_start = str(pd.to_datetime(da.time.values[0]).year)
+    
+    start_timestep = start_month+" "+str(year_start) # mon year 
+    end_timestep = end_month+" "+str(int(year_start)+1) # mon year
+    winter = pd.date_range(start=start_timestep, end=end_timestep, freq="MS") # pandas date range defining winter season
+    months_in_da = [mon for mon in winter if mon in da.time.values] # Just grab months if they correspond to a time coordinate in da
+
+    if len(months_in_da) > 0: 
+        if (force_complete_season == True) and (all([mon in da.time.values for mon in winter])==False): 
+            da_winter = None
+        else: 
+            da_winter = da.sel(time=months_in_da)
+    else: 
+        da_winter = None
+        
+    return da_winter

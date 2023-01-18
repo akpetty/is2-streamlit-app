@@ -61,3 +61,11 @@ I have a Mac. I'm unsure if these instructions would work on other OS (I assume 
 5) Install packages from requirements.txt: `python3 -m pip install -r requirements.txt`
 
 Anytime you want to activate the environment, just run step 4 in your terminal. 
+
+
+### To run locally
+
+conda activate icesat2_dashboard_v2
+streamlit run Home.py
+
+
