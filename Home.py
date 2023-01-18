@@ -101,7 +101,8 @@ st.set_page_config(page_title="Home", page_icon=":penguin:", layout = "wide")
 # -------- SIDEBAR INFORMATION --------
 #st.sidebar.title("Home")
 
-
+st.sidebar.title("Home page")
+st.sidebar.markdown("Add some more ancillary information here about the data or maybe the point of this app.")
 
 # -------- TITLE --------
 st.title("Monthly gridded winter Arctic sea ice thickness data from ICESat-2 (IS2SITMOGR4)")

@@ -154,6 +154,8 @@ st.title("Monthly gridded winter Arctic sea ice thickness data from ICESat-2 (IS
 
 # -------- SIDEBAR INFORMATION --------
 
+st.sidebar.title("Mapping options")
+
 #st.sidebar.title("Mapping options")
 st.sidebar.markdown("Choose your date and variable of interest, and the map will automatically update.")
 
